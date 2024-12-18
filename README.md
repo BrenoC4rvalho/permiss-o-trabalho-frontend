@@ -57,3 +57,29 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+async drawImg(imageBytes: Uint8Array, imageType: 'png' | 'jpg', width: number = 100, height: number = 100) {
+    if (!this.currentPage || !this.pdfDoc) return;
+
+    let image;
+    if (imageType === 'png') {
+      image = await this.pdfDoc.embedPng(imageBytes);
+    } else {
+      image = await this.pdfDoc.embedJpg(imageBytes);
+    }
+
+    // Verifica espaço na página
+    this.checkPageEnd();
+
+    // Desenha a imagem
+    this.currentPage.drawImage(image, {
+      x: this.xAxis,
+      y: this.yAxis - height, // Ajusta a posição vertical
+      width,
+      height,
+    });
+
+    // Atualiza a posição Y
+    this.yAxis -= height + this.lineHeight;
+  }

@@ -1,0 +1,17 @@
+<div *ngIf="showSignatureModal">
+    <div>
+      <canvas #signatureCanvas width="400" height="200"></canvas>
+      <div>
+        <button 
+          (click)="clearSignature()"
+        >
+          Clear
+        </button>
+        <button 
+          (click)="saveSignature()"
+        >
+          Save Signature
+        </button>
+      </div>
+    </div>
+</div>
