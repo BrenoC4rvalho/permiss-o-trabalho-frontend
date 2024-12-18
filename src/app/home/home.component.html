@@ -62,28 +62,34 @@
                             <th class="border border-gray-300 px-4 py-2 w-3/4">Valor</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody cdkDropList (cdkDropListDropped)="drop($event)">
                             <ng-container *ngFor="let category of getCategoryNames()">
-                                <tr (click)="toggleCategoryVisibility(category)">
-                                    <td  colspan="2" class="bg-gray-200 text-gray-700 font-bold px-4 py-2">
-                                        {{ category }}
-                                    </td>
-                                </tr>
-                                <ng-container
-                                *ngIf="isCategoryVisible(category)"
-                                >
-                                    <tr
-                                    *ngFor="let item of groupedItems[category]"
-                                    class="hover:bg-gray-50"
-                                    >
-                                        <td class="border border-gray-300 px-4 py-2">
-                                            {{ item.item }}
+
+                                    <tr (click)="toggleCategoryVisibility(category)" cdkDrag>
+                                        <td  colspan="2" class="bg-gray-200 text-gray-700 font-bold px-4 py-2">
+                                            {{ category }}
                                         </td>
-                                        <td class="border border-gray-300 px-4 py-2">
-                                            {{ item.valor }}
-                                        </td>
+                                        <ng-template cdkDragPlaceholder>
+                                            <tr class="bg-yellow-200 text-center font-bold">
+                                              <td colspan="2">Arrastando...</td>
+                                            </tr>
+                                        </ng-template>
                                     </tr>
-                                </ng-container>
+                                    <ng-container
+                                    *ngIf="isCategoryVisible(category)"
+                                    >
+                                        <tr
+                                        *ngFor="let item of groupedItems[category]"
+                                        class="hover:bg-gray-50"
+                                        >
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                {{ item.item }}
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-2">
+                                                {{ item.valor }}
+                                            </td>
+                                        </tr>
+                                    </ng-container>
                             </ng-container>
                         </tbody>
                     </table>

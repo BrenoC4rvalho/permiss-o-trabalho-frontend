@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import {
   CdkDrag,
   CdkDragDrop,
+  CdkDragPlaceholder,
   CdkDropList,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
@@ -14,7 +15,7 @@ import { range } from 'rxjs';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, FormsModule, CdkDropList, CdkDrag, SignaturePadComponent],
+  imports: [CommonModule, FormsModule, CdkDropList, CdkDrag, CdkDragPlaceholder, SignaturePadComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
