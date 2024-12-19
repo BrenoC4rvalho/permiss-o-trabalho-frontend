@@ -22,6 +22,10 @@ export class SignaturePadComponent {
     }, 0)
   }
 
+  closeSignatureModal() {
+    this.showSignatureModal = false
+  }
+
   initializeCanvas() {
     const canvas = this.signatureCanvas.nativeElement
     this.canvasContext = canvas.getContext('2d')!

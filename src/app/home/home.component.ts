@@ -11,7 +11,6 @@ import {
 } from '@angular/cdk/drag-drop';
 import { SignaturePadComponent } from "../shared/signature-pad/signature-pad.component";
 import { PdfService } from '../core/services/pdf.service';
-import { range } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -28,7 +27,7 @@ export class HomeComponent {
   visibleCategories: Set<string> = new Set()
 
   signatureBase64: string | null = null
-  
+
   constructor(private workPermitService: WorkPermitService, private pdfService: PdfService) {}
 
   ngOnInit() {
@@ -88,18 +87,26 @@ export class HomeComponent {
     this.groupedItems = newGroupedItems;
   }
 
+  hasSignatureCategory() {
+    if(this.selectedPermission) {
+      return this.selectedPermission.itens.some((item: { categoria: string; }) => item.categoria === 'Assinatura')  
+    }
+
+    return false
+  }
+
+
   openSignatureModal(signaturePad: SignaturePadComponent) {
     signaturePad.openSignatureModal()
   }
 
   handleSignatureSaved(signature: string) {
     this.signatureBase64 = signature
+   
   }
 
   async generatePdf() {
-    console.log(this.selectedPermission)
-    console.log(this.groupedItems)
-    
+
     if(!this.selectedPermission) 
       return
 
@@ -109,8 +116,6 @@ export class HomeComponent {
     await this.pdfService.drawText(this.selectedPermission.numero_permissao)
     await this.pdfService.drawText('Nome permissao')
     await this.pdfService.drawText(this.selectedPermission.nome_permissao)
-
-
 
     Object.keys(this.groupedItems).forEach((category) => {
        this.pdfService.drawCategory(category)

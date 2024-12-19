@@ -1,4 +1,4 @@
-<div>
+<div class="relative">
     <header class="flex justify-center bg-yellow-300">
         <h1 class="text-4xl py-3">Logo da empresa</h1>
     </header>
@@ -46,11 +46,19 @@
                             Buscar
                         </button>
                         <button
-                            (click)="generatePdf()"
                             *ngIf="selectedPermission" 
+                            (click)="generatePdf()"
                             class="bg-slate-100 mx-4 px-5 py-2 rounded-md hover:bg-slate-200 border border-gray-300 transition">
                             Gerar PDF
                         </button>
+                        <button
+                            *ngIf="hasSignatureCategory()"
+                            (click)="openSignatureModal(signaturePad)"
+                            class="bg-slate-100 px-5 py-2 rounded-md hover:bg-slate-200 border border-gray-300 transition"
+                        >
+                            Assinatura
+                        </button>
+
                     </div>
                 </form>
 
@@ -98,20 +106,17 @@
             </div>
         </div>
     </main>
-</div>
 
-
-    <!-- signature-pad -->
-    <!-- <div>
         <app-signature-pad
             #signaturePad
             (signatureSaved)="handleSignatureSaved($event)"
         >
         </app-signature-pad>
-        <button (click)="openSignatureModal(signaturePad)">
-            signature
-        </button>
-    </div> -->
+
+</div>
+
+
+    
 
 
     <!-- drag and drop -->
