@@ -93,8 +93,13 @@
                                             <td class="border border-gray-300 px-4 py-2">
                                                 {{ item.item }}
                                             </td>
-                                            <td class="border border-gray-300 px-4 py-2">
-                                                {{ item.valor }}
+                                            <td class="border border-gray-300 px-4 py-2" >
+                                                <ng-container *ngIf="hasSignatureSigned(category); else noSignatureSigned">
+                                                    <img [src]="item.valor">
+                                                </ng-container>    
+                                                <ng-template #noSignatureSigned>
+                                                    {{ item.valor }}
+                                                </ng-template>
                                             </td>
                                         </tr>
                                     </ng-container>
@@ -107,11 +112,11 @@
         </div>
     </main>
 
-        <app-signature-pad
-            #signaturePad
-            (signatureSaved)="handleSignatureSaved($event)"
-        >
-        </app-signature-pad>
+    <app-signature-pad
+        #signaturePad
+        (signatureSaved)="handleSignatureSaved($event)"
+    >
+    </app-signature-pad>
 
 </div>
 

@@ -44,7 +44,6 @@ export class HomeComponent {
     if(this.numberPermission) {
       this.workPermitService.getPermissionByNumber(this.numberPermission).subscribe((data: any[]) => {
         this.selectedPermission = data
-        console.log(this.selectedPermission)
         this.groupItemsByCategory(this.selectedPermission.itens)
       })
     } 
@@ -95,6 +94,14 @@ export class HomeComponent {
     return false
   }
 
+  hasSignatureSigned(category: string): boolean {
+    const signatureField = this.selectedPermission.itens.find((item: { categoria: string; }) => item.categoria === "Assinatura") 
+    if(signatureField.valor != null && category === "Assinatura") {
+      return true
+    }
+    return false
+  }
+
 
   openSignatureModal(signaturePad: SignaturePadComponent) {
     signaturePad.openSignatureModal()
@@ -102,7 +109,11 @@ export class HomeComponent {
 
   handleSignatureSaved(signature: string) {
     this.signatureBase64 = signature
-   
+    if(this.selectedPermission) {
+      const signatureField = this.selectedPermission.itens.find((item: { categoria: string; }) => item.categoria === "Assinatura") 
+      signatureField.valor = signature
+      console.log(this.selectedPermission)
+    }
   }
 
   async generatePdf() {
