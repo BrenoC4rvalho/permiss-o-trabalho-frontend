@@ -125,21 +125,20 @@ export class HomeComponent {
 
     await pdf.createPDF()
     
-    await pdf.drawText('Numero permissao')
+    await pdf.drawText('Número permissão')
     await pdf.drawText(this.selectedPermission.numero_permissao)
-    await pdf.drawText('Nome permissao')
+    await pdf.drawText('Nome permissão')
     await pdf.drawText(this.selectedPermission.nome_permissao)
 
     Object.keys(this.groupedItems).forEach((category) => {
-       pdf.drawCategory(category)
+      pdf.drawCategory(category)
        this.groupedItems[category].forEach(async (item: any) => {
         pdf.drawItemTitle(item.item)         
-          if(category === "Assinatura" && item.valor) {
-            pdf.drawText(item.valor)
-            await pdf.drawSignature(item.valor)
-          } else {
-            pdf.drawItemValue(item.valor)         
-          }
+        if(category === "Assinatura" && item.valor != null) {
+          await pdf.drawSignature(item.valor)
+        } else if(item.valor != null) {
+          pdf.drawItemValue(item.valor)         
+        }
        })
     })
 
