@@ -1,85 +1,78 @@
-# Frontend
+# Permissão de trabalho
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.5.
+## 👀 Como ficou ???
 
-## Development server
+<img src="./img/1.png" width="600px"></img>
+----------
+<img src="./img/2.png" width="600px"></img>
+----------
+<img src="./img/3.png" width="600px"></img>
+----------
+<img src="./img/4.png" width="600px"></img>
+----------
+<img src="./img/5.png" width="600px"></img>
 
-To start a local development server, run:
+## 🧑‍💻 Tecnologias usadas
 
-```bash
-ng serve
-```
+O projeto foi desenvolvido com as seguintes tecnologias:
+- [TypeScript](https://www.typescriptlang.org/)
+- [Angular](https://angular.io/)
+- [Angular CDK](https://material.angular.io/cdk)
+- [Tailwind CSS](https://tailwindcss.com/)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## ⌨️ Sobre o projeto
 
-## Code scaffolding
+O projeto consiste em um frontend para um sistema de lista de permissão de trabalho. Ele foi desenvolvido utilizando Angular como framework principal, Tailwind CSS para estilização, e Angular CDK para alguns componentes estruturais.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🚀 Rodar o projeto
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### 1. Instale as dependências:
+Certifique-se de ter o Node.js instalado na sua máquina. Caso não tenha, instale-o [aqui](https://nodejs.org/en/download/).
 
 ```bash
-ng test
+npm install
 ```
 
-## Running end-to-end tests
+### 2. Certifique-se de ter uma API rodando:
+A API deve fornecer os seguintes endpoints:
 
-For end-to-end (e2e) testing, run:
+#### Endpoint 1: Obter detalhes de uma permissão de trabalho
+**URL:** `/api/permissao/:id`
+
+**Resposta exemplo:**
+```json
+{
+    "numero_permissao": "PT-12345",
+    "nome_permissao": "Permissão para Manutenção Predial",
+    "itens": [
+        {
+            "categoria": "Dados da Empresa",
+            "item": "Nome da Empresa",
+            "valor": "CSN"
+        }
+    ]
+}
+```
+
+#### Endpoint 2: Obter uma lista de permissões
+**URL:** `/api/permissoes`
+
+**Resposta exemplo:**
+```json
+[
+    "PT-12345",
+    "PT-67890",
+    "PT-11223"
+]
+```
+
+Caso não tenha uma API disponível, você pode utilizar mocks ou ferramentas como [JSON Server](https://github.com/typicode/json-server) para simular esses endpoints.
+
+### 3. Inicie o servidor de desenvolvimento:
 
 ```bash
-ng e2e
+npm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-
-async drawImg(imageBytes: Uint8Array, imageType: 'png' | 'jpg', width: number = 100, height: number = 100) {
-    if (!this.currentPage || !this.pdfDoc) return;
-
-    let image;
-    if (imageType === 'png') {
-      image = await this.pdfDoc.embedPng(imageBytes);
-    } else {
-      image = await this.pdfDoc.embedJpg(imageBytes);
-    }
-
-    // Verifica espaço na página
-    this.checkPageEnd();
-
-    // Desenha a imagem
-    this.currentPage.drawImage(image, {
-      x: this.xAxis,
-      y: this.yAxis - height, // Ajusta a posição vertical
-      width,
-      height,
-    });
-
-    // Atualiza a posição Y
-    this.yAxis -= height + this.lineHeight;
-  }
+### 4. Acesse o projeto no navegador:
+Abra [http://localhost:4200](http://localhost:4200) para visualizar o projeto em execução.
