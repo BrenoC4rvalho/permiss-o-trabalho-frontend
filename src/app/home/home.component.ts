@@ -10,7 +10,7 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { SignaturePadComponent } from "../shared/signature-pad/signature-pad.component";
-import { PdfService } from '../core/services/pdf.service';
+import { PdfUtil } from '../core/utils/pdfUtil';
 
 @Component({
   selector: 'app-home',
@@ -28,7 +28,7 @@ export class HomeComponent {
 
   signatureBase64: string | null = null
 
-  constructor(private workPermitService: WorkPermitService, private pdfService: PdfService) {}
+  constructor(private workPermitService: WorkPermitService) {}
 
   ngOnInit() {
     this.getPermissionsName()
@@ -121,24 +121,31 @@ export class HomeComponent {
     if(!this.selectedPermission) 
       return
 
-    await this.pdfService.createPDF()
+    const pdf: PdfUtil = new PdfUtil()
 
-    await this.pdfService.drawText('Numero permissao')
-    await this.pdfService.drawText(this.selectedPermission.numero_permissao)
-    await this.pdfService.drawText('Nome permissao')
-    await this.pdfService.drawText(this.selectedPermission.nome_permissao)
+    await pdf.createPDF()
+    
+    await pdf.drawText('Numero permissao')
+    await pdf.drawText(this.selectedPermission.numero_permissao)
+    await pdf.drawText('Nome permissao')
+    await pdf.drawText(this.selectedPermission.nome_permissao)
 
     Object.keys(this.groupedItems).forEach((category) => {
-       this.pdfService.drawCategory(category)
-       this.groupedItems[category].forEach((item: any) => {
-          this.pdfService.drawItemTitle(item.item)         
-          this.pdfService.drawItemValue(item.valor)         
+       pdf.drawCategory(category)
+       this.groupedItems[category].forEach(async (item: any) => {
+        pdf.drawItemTitle(item.item)         
+          if(category === "Assinatura" && item.valor) {
+            pdf.drawText(item.valor)
+            await pdf.drawSignature(item.valor)
+          } else {
+            pdf.drawItemValue(item.valor)         
+          }
        })
     })
 
     
     
-    await this.pdfService.saveAndDownload()
+    await pdf.saveAndDownload()
 
   }
 

@@ -1,10 +1,6 @@
-import { Injectable } from '@angular/core';
 import { PDFDocument, PDFFont, PDFPage, rgb, StandardFonts }  from 'pdf-lib'
 
-@Injectable({
-  providedIn: 'root'
-})
-export class PdfService {
+export class PdfUtil {
 
   private pdfDoc: PDFDocument | undefined
   private pages: PDFPage[] = []
@@ -87,8 +83,6 @@ export class PdfService {
       this.yAxis -= this.lineHeight
     }
 
-
-    //this.yAxis -= this.lineHeight
   }
 
   async drawCategory(category: string, fontSize: number = 14, bgColor = rgb(0.95, 0.6, 0), textColor = rgb(1, 1, 1)) {
@@ -118,7 +112,7 @@ export class PdfService {
       font,
     });
   
-    this.yAxis -= this.lineHeight + 10; // Ajuste de posição
+    this.yAxis -= this.lineHeight + 10; 
   }
   
   async drawItemTitle(itemTitle: string, fontSize: number = 12, color = rgb(0, 0, 0)) {
@@ -155,13 +149,65 @@ export class PdfService {
     this.yAxis -= this.lineHeight + 5;
   }
 
-  async drawSignature() {
+  async drawImg(imageBytes: Uint8Array, imageType: 'png' | 'jpg', width: number = 100, height: number = 100) {
+    if (!this.currentPage || !this.pdfDoc) return;
 
+    let image;
+    if (imageType === 'png') {
+      image = await this.pdfDoc.embedPng(imageBytes);
+    } else {
+      image = await this.pdfDoc.embedJpg(imageBytes);
+    }
+
+    this.checkPageEnd();
+
+    this.currentPage.drawImage(image, {
+      x: this.xAxis,
+      y: this.yAxis - height, 
+      width,
+      height,
+    });
+
+    this.yAxis -= height + this.lineHeight;
   }
 
-  async drawImg() {
 
+  // async drawSignature(signatureBase64: string, width: number = 150, height: number = 50) {
+  //   if(!this.currentPage || !this.pdfDoc)
+  //     return
+
+  //   const signatureBytes = Uint8Array.from(atob(signatureBase64), (char) => char.charCodeAt(0))
+
+  //   this.checkPageEnd()
+
+  //   await this.drawImg(signatureBytes, "png", width, height)
+    
+  // }
+
+  async drawSignature(signatureBase64: string, width: number = 150, height: number = 50) {
+    if (!this.currentPage || !this.pdfDoc) return;
+  
+    // Converte o base64 para um array de bytes
+    const signatureBytes = await fetch(signatureBase64).then((res) => res.arrayBuffer())
+  
+    // Embeda a imagem no PDF
+    const signatureImage = await this.pdfDoc.embedPng(signatureBytes);
+  
+    // Verifica o fim da página
+    this.checkPageEnd();
+  
+    // Adiciona a imagem da assinatura no PDF
+    this.currentPage.drawImage(signatureImage, {
+      x: this.xAxis,
+      y: this.yAxis - height, // Ajusta a posição vertical
+      width: width,
+      height: height,
+    });
+  
+    // Ajusta a posição vertical após adicionar a assinatura
+    this.yAxis -= height + 20; // Adiciona espaço abaixo da assinatura
   }
+  
 
   async saveAndDownload(fileName: string = 'document.pdf') {
     if(!this.pdfDoc)
